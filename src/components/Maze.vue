@@ -127,6 +127,7 @@ reset();
       </tr>
     </table>
   </div>
+  <small>CLICK TO GENERATE</small>
 </template>
 
 <style>
