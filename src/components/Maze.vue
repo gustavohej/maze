@@ -1,41 +1,42 @@
 <script setup lang="ts">
-import { maze, text, generate } from "../composables/maze";
+import { h } from "vue";
+import { useMazeStore } from "../stores/maze";
+import MazeLogo from "./MazeLogo.vue";
+
+const { generate, maze } = useMazeStore();
+
 generate(0, 0);
+
+const render = () => {
+  return h(
+    "table",
+    maze.map((row, i) => {
+      return h(
+        "tr",
+        row.map((col, j) => {
+          return h("td", {
+            class: col,
+            onClick: () => generate(i, j),
+          });
+        })
+      );
+    })
+  );
+};
 </script>
 
 <template>
-  <!-- logo -->
-  <div class="maze">
-    <table>
-      <tr v-for="(row, i) in text" :key="i">
-        <td
-          v-for="(col, j) in row"
-          :key="`${i}${j}`"
-          :class="[col === 0 ? 'passage' : 'wall']"
-        ></td>
-      </tr>
-    </table>
+  <div class="box">
+    <MazeLogo />
   </div>
-  <!-- maze -->
-  <div class="maze">
-    <div>
-      <table>
-        <tr v-for="(row, i) in maze" :key="i">
-          <td
-            v-for="(col, j) in row"
-            :key="`${i}${j}`"
-            :class="col"
-            @click="generate(i, j)"
-          ></td>
-        </tr>
-      </table>
-    </div>
+  <div class="box">
+    <render />
   </div>
-  <small>CLICK TO GENERATE</small>
+  <small>Prim's algorithm</small>
 </template>
 
 <style>
-.maze {
+.box {
   display: flex;
   justify-content: center;
   margin-bottom: 12px;
@@ -46,6 +47,7 @@ table {
 td {
   width: 5px;
   height: 5px;
+  cursor: pointer;
 }
 td:hover {
   background-color: #da216e;
